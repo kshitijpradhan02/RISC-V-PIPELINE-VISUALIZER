@@ -2,7 +2,7 @@
 ![Qt](https://img.shields.io/badge/Qt-6-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-# RISC-V-PIPELINE-VISUALIZER-USING-C-
+# RISC-V-PIPELINE-VISUALIZER-USING-C++
 Interactive Qt-based RISC-V 5-stage pipeline simulator with real-time visualization of instruction flow, register/memory state, and load-use hazard detection.
 RISC-V Pipeline Visualizer is a Qt-based interactive simulator for a classic 5-stage RISC-V pipeline. It allows you to step through execution cycle by cycle and visually observe how instructions move through the pipeline, how registers and memory change, and how hazards occur and are resolved.
 
