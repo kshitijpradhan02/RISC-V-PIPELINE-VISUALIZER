@@ -81,9 +81,19 @@ From the command prompt:
 ```batch
 cd build\Release
 RISCVPipeline.exe
-```<img width="1119" height="981" alt="image" src="https://github.com/user-attachments/assets/8fb612cb-b542-46be-83f7-385186f76e34" />
-<img width="1107" height="810" alt="image" src="https://github.com/user-attachments/assets/7154b306-30f2-49f5-80a1-cd20903bb037" />
-<img width="1126" height="631" alt="image" src="https://github.com/user-attachments/assets/d72dc0bb-c947-405b-8a50-aff261ef33cd" />
+``## Hazard Demonstrations
+
+### Data Hazard (RAW)
+
+![Data Hazard](Pic2_Data_Hazard_1.png)
+
+### Load-Use Hazard
+
+![Load Hazard](Pic_3_Load_Hazard_2.png)
+
+### Forwarding Example
+
+![Forwarding](Pic_4_Data_Hazard.png)
 
 
 
