@@ -85,17 +85,17 @@ RISCVPipeline.exe
 
 ### Data Hazard (RAW)
 
-![Data Hazard](Pic2_Data_Hazard_1.png)
+<img width="1920" height="960" alt="image" src="https://github.com/user-attachments/assets/43039284-768e-4bfa-83d9-daac7ebe0715" />
+
 
 ### Load-Use Hazard
-
-![Load Hazard](Pic_3_Load_Hazard_2.png)
-
-### Forwarding Example
-
-![Forwarding](Pic_4_Data_Hazard.png)
+<img width="862" height="628" alt="image" src="https://github.com/user-attachments/assets/9bd4bbb9-b3a7-4d53-bb7e-e0e417580ca7" />
 
 
+
+### Control Hazard
+
+<img width="884" height="603" alt="image" src="https://github.com/user-attachments/assets/75c53d7b-bbed-4907-9a44-b67b1d34924c" />
 
 
 
