@@ -88,6 +88,8 @@ RISCVPipeline.exe
 
 
 
+
+
 The application window includes:
 - A text editor for entering RISC-V assembly  
 - A **STEP** button to advance the pipeline  
@@ -120,7 +122,7 @@ Processors often face timing conflicts, called **hazards**. The simulator highli
 
 ### 1. Data Hazard (Read-After-Write)
 
-Occurs when an instruction tries to read a register whose value is not yet written back.
+Occurs when an instruction attempts to read a register whose value has not yet been written back.
 
 ```asm
 lw x1, 0(x0)
