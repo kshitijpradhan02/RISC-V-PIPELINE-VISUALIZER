@@ -125,6 +125,8 @@ You will see:
 - Cycle and program counters changing  
 
 When all stages show `nop`, the program has completed.
+<img width="940" height="496" alt="image" src="https://github.com/user-attachments/assets/8e507a5c-4b23-45eb-8705-bc3ad50f13ba" />
+
 
 ## Understanding Pipeline Hazards
 
