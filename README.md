@@ -3,218 +3,221 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 # RISC-V-PIPELINE-VISUALIZER-USING-C++
-Interactive Qt-based RISC-V 5-stage pipeline simulator with real-time visualization of instruction flow, register/memory state, and load-use hazard detection.
-RISC-V Pipeline Visualizer is a Qt-based interactive simulator for a classic 5-stage RISC-V pipeline. It allows you to step through execution cycle by cycle and visually observe how instructions move through the pipeline, how registers and memory change, and how hazards occur and are resolved.
+ under the MIT License. See the LICENSE file for details.
 
-This tool is intended for students, educators, and anyone learning computer architecture who wants a concrete way to understand pipeline behavior.
+An interactive desktop tool built with **C++17** and **Qt 6** that simulates a classic 5-stage RISC-V pipeline.  
+It lets you step through instructions cycle by cycle and watch how they move through the pipeline stages, how registers and memory change, and how hazards are detected and resolved.
 
-Overview
+## Overview
 
-Understanding pipelined processors can be difficult when everything happens conceptually at once. This simulator breaks execution into clock cycles and shows exactly what happens in each pipeline stage:
+Modern processors complete parts of several instructions at the same time. This simulator shows what happens during each **pipeline stage** per clock cycle:
 
-Instruction Fetch (IF)
+- **IF** – Instruction Fetch  
+- **ID** – Instruction Decode  
+- **EX** – Execute  
+- **MEM** – Memory Access  
+- **WB** – Write Back  
 
-Instruction Decode (ID)
+Your RISC-V code runs one cycle at a time, allowing you to see every transition.
 
-Execute (EX)
+## Features
 
-Memory Access (MEM)
+- Step-by-step simulation with an interactive GUI  
+- Real-time display of all 5 pipeline stages  
+- Live register and memory views  
+- Automatic load-use hazard detection  
+- Clear messages and visible stalls/bubbles  
+- Cycle and program counters  
+- Simple instruction set  
 
-Write Back (WB)
+## Supported Instructions
 
-You write simple RISC-V assembly code, press a STEP button, and watch instructions advance through the pipeline one cycle at a time.
+This lightweight simulator currently handles:
 
-Features
+- **`lw xd, imm(xs1)`** – Load word from memory into `xd`  
+- **`sw xs2, imm(xs1)`** – Store word from `xs2` into memory  
+- **`add xd, xs1, xs2`** – Add two register values and save result in `xd`  
 
-Interactive, cycle-by-cycle simulation
+These are enough to demonstrate the core pipeline behaviors and data hazards.
 
-Visual display of all five pipeline stages
+## Getting Started on Windows
 
-Live register file view (x0 through x31)
+### Prerequisites
 
-Live memory view
+Make sure you have the following installed:
 
-Automatic detection of load-use hazards
+- **CMake 3.16+**  
+- **Qt 6.x** (Qt Base, Widgets, and GUI modules)  
+- **Visual Studio 2019 or newer** with C++ build tools  
+- **Git** (optional, for cloning the repository)
 
-Stall insertion with clear hazard messages
+You can verify Qt with:
+```
+qmake --version
+```
 
-Program counter and cycle counter tracking
+### Build Instructions (Visual Studio)
 
-Simple and beginner-friendly instruction set
+1. Open **Developer Command Prompt for VS** or use **Qt 6 Command Prompt**.  
+2. Clone and build the repository:
 
-Supported Instructions
-
-The simulator currently supports the following RISC-V instructions:
-
-Load Word
-
-lw xd, imm(xs1)
-Loads a word from memory at address xs1 + imm into register xd.
-
-Example:
-
-lw x1, 0(x0)
-
-Store Word
-
-sw xs2, imm(xs1)
-Stores the value in xs2 to memory at address xs1 + imm.
-Example:
-sw x2, 4(x1)
-Add
-add xd, xs1, xs2
-Adds the values in xs1 and xs2 and stores the result in xd.
-Example:
-add x3, x1, x2
-
-These instructions are sufficient to demonstrate basic pipeline execution and data hazards.
-Getting Started
-Requirements
-CMake 3.16 or newer
-Qt 6 (Core, Gui, and Widgets modules)
-
-A C++17 compatible compiler (GCC, Clang, or MSVC)
-
-Windows, macOS, or Linux
-
-Building the Project
-
-Clone the repository and build it using CMake:
-
+```batch
 git clone https://github.com/your-username/your-repo.git
 cd your-repo
-
 mkdir build
 cd build
-
-cmake ..
+cmake .. -G "Visual Studio 17 2022" -A x64
 cmake --build . --config Release
+```
+
+After building, **RISCVPipeline.exe** will appear in:
+```
+build\Release\
+```
+
+### Run the Simulator
+
+From the command prompt:
+```batch
+cd build\Release
+RISCVPipeline.exe
+```<img width="1119" height="981" alt="image" src="https://github.com/user-attachments/assets/8fb612cb-b542-46be-83f7-385186f76e34" />
+<img width="1107" height="810" alt="image" src="https://github.com/user-attachments/assets/7154b306-30f2-49f5-80a1-cd20903bb037" />
+<img width="1126" height="631" alt="image" src="https://github.com/user-attachments/assets/d72dc0bb-c947-405b-8a50-aff261ef33cd" />
 
 
-On Linux or macOS, you may also use:
-
-make -j$(nproc)
 
 
-After building, the executable will be named RISCVPipeline (or RISCVPipeline.exe on Windows).
+The application window includes:
+- A text editor for entering RISC-V assembly  
+- A **STEP** button to advance the pipeline  
+- Tables showing stage activity, register values, and memory contents  
 
-Running the Simulator
+## Example Program
 
-From the build directory:
+Enter code like this in the editor:
 
-./RISCVPipeline
-
-
-A graphical window will open containing:
-
-A text editor for RISC-V assembly code
-
-A STEP button
-
-Tables showing pipeline stages, registers, and memory
-
-How to Use
-
-Enter your RISC-V program in the text editor. Example:
-
+```asm
 lw x1, 0(x0)
 lw x2, 4(x0)
 add x3, x1, x2
 sw x3, 8(x0)
+```
 
+Press **STEP** repeatedly to observe the simulation.
 
-Click the STEP button to advance the simulation by one clock cycle.
+You will see:
+- Instructions moving through each pipeline stage  
+- Register `x3` receiving the computed result  
+- Memory updates at address `8(x0)`  
+- Cycle and program counters changing  
 
-Observe:
+When all stages show `nop`, the program has completed.
 
-Instructions moving through pipeline stages
+## Understanding Pipeline Hazards
 
-Register values updating during write-back
+Processors often face timing conflicts, called **hazards**. The simulator highlights them visually, inserting *stalls* or *flushes* as required.
 
-Memory updates during store instructions
+### 1. Data Hazard (Read-After-Write)
 
-The program counter and cycle counter changing
+Occurs when an instruction tries to read a register whose value is not yet written back.
 
-Continue stepping until all pipeline stages show nop. At this point, the program has fully executed.
-
-Hazard Handling
-
-The simulator automatically detects load-use hazards.
-
-Example:
-
+```asm
 lw x1, 0(x0)
 add x2, x1, x1
+```
 
+Here, `add` depends on `lw`.  
+The simulator pauses `add` for a cycle — showing a **bubble** — until `x1` is ready.
 
-In this case, the add instruction depends on the result of the lw. The simulator inserts a stall, displays a hazard warning, and shows the bubble in the pipeline.
+Simplified view:
 
-This behavior matches how a real pipelined processor handles such hazards.
+| Cycle | IF | ID | EX | MEM | WB |
+|:------|:--:|:--:|:--:|:---:|:--:|
+| 1     | lw | -  | -  | -   | -  |
+| 2     | add| lw | -  | -   | -  |
+| 3     | stall | add | lw | - | - |
+| 4     | -  | stall | add | lw | - |
 
-Internal Design
+### 2. Structural Hazard
 
-The simulator maintains:
+When two stages need the same hardware (like memory) in the same cycle.
 
-32 general-purpose registers (x0 to x31, with x0 hardwired to zero)
+Example:
+```asm
+lw x1, 0(x2)
+sw x3, 4(x2)
+```
+If your model has a single memory port, one instruction must wait.  
+The simulator visually freezes one stage with a "Memory Busy" note.
 
-A memory array with predefined initial values
+### 3. Control Hazard (Branches & Jumps)
 
-Five pipeline stage registers, each with an instruction and valid flag
+Occurs when the CPU cannot determine the next instruction until a branch condition is known.
 
-A program counter pointing to the next instruction
+```asm
+beq x1, x2, LABEL
+add x3, x4, x5
+LABEL: sub x6, x6, x7
+```
 
-On each cycle:
+Until `beq` finishes the **Execute** stage, the next instruction path is unknown.  
+If the branch is taken, the visualizer *flushes* (clears) the incorrect instruction.
 
-Write-back updates registers
+| Cycle | IF | ID | EX | MEM | WB |
+|:------|:--:|:--:|:--:|:---:|:--:|
+| 1     | beq| -  | -  | -   | -  |
+| 2     | add| beq| -  | -   | -  |
+| 3     | sub| add| beq| -   | -  |
+| 4     | flush | sub | add | beq | - |
+| 5     | LABEL | - | - | - | - |
 
-Memory stage performs loads and stores
+## Internal Design
 
-Hazard detection checks for load-use conflicts
+The simulator models:
+- 32 general-purpose registers (x0 = 0)
+- A simplified memory array
+- Pipeline state registers (IF → ID → EX → MEM → WB)
+- Hazard detection logic and stage control
 
-Instructions advance through the pipeline
+Each clock cycle:
+1. The **WB stage** updates registers.  
+2. **MEM stage** performs loads/stores.  
+3. The hazard unit checks for dependencies.  
+4. Instructions advance to the next stage.  
+5. A new instruction is fetched if space is available.  
 
-A new instruction is fetched if possible
+## Folder Structure
 
-Project Structure
+```
 .
-├── CMakeLists.txt       Build configuration
-├── main.cpp             Application entry point
-├── mainwindow.h/.cpp    Qt GUI implementation
-├── pipeline.h/.cpp      Pipeline simulation logic
-└── README.md            Documentation
+├── CMakeLists.txt
+├── main.cpp
+├── mainwindow.h/.cpp
+├── pipeline.h/.cpp
+└── README.md
+```
 
+`mainwindow.cpp` → User interface  
+`pipeline.cpp` → Simulation logic
 
-The pipeline module handles instruction decoding, execution, and hazard detection.
-The main window module handles visualization and user interaction.
+## Future Plans
 
-Future Improvements
+- More RISC-V instructions (sub, and, or, branches, jumps)  
+- Forwarding and bypassing logic  
+- "Run Continuously" mode  
+- Editable initial memory and register states  
+- Export trace logs  
+- Unit tests  
 
-Planned or possible enhancements include:
+## Contributing
 
-Additional instructions (sub, and, or, branches, jumps)
+1. Fork this repository  
+2. Create a feature branch  
+3. Test your changes  
+4. Open a pull request  
 
-Forwarding support
+## License
 
-Configurable initial register and memory values
-
-Automatic run mode
-
-Execution trace export
-
-Unit tests for pipeline behavior
-
-Contributing
-
-Contributions are welcome.
-
-Fork the repository
-
-Create a feature branch
-
-Make and test your changes
-
-Submit a pull request
-
-License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the **MIT License**.  
+See the `LICENSE` file for details.
