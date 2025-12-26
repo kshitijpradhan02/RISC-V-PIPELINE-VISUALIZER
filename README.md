@@ -83,19 +83,6 @@ cd build\Release
 RISCVPipeline.exe
 ``## Hazard Demonstrations
 
-### Data Hazard (RAW)
-
-<img width="1920" height="960" alt="image" src="https://github.com/user-attachments/assets/43039284-768e-4bfa-83d9-daac7ebe0715" />
-
-
-### Load-Use Hazard
-<img width="862" height="628" alt="image" src="https://github.com/user-attachments/assets/9bd4bbb9-b3a7-4d53-bb7e-e0e417580ca7" />
-
-
-
-### Control Hazard
-
-<img width="884" height="603" alt="image" src="https://github.com/user-attachments/assets/75c53d7b-bbed-4907-9a44-b67b1d34924c" />
 
 
 
@@ -127,6 +114,21 @@ You will see:
 When all stages show `nop`, the program has completed.
 <img width="940" height="496" alt="image" src="https://github.com/user-attachments/assets/8e507a5c-4b23-45eb-8705-bc3ad50f13ba" />
 
+
+
+### Data Hazard (RAW)
+
+<img width="1920" height="960" alt="image" src="https://github.com/user-attachments/assets/43039284-768e-4bfa-83d9-daac7ebe0715" />
+
+
+### Load-Use Hazard
+<img width="862" height="628" alt="image" src="https://github.com/user-attachments/assets/9bd4bbb9-b3a7-4d53-bb7e-e0e417580ca7" />
+
+
+
+### Control Hazard
+
+<img width="884" height="603" alt="image" src="https://github.com/user-attachments/assets/75c53d7b-bbed-4907-9a44-b67b1d34924c" />
 
 ## Understanding Pipeline Hazards
 
