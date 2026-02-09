@@ -197,4 +197,3 @@ If you want, I can also:
 * Write a **project abstract** for reports
 * Tighten it for **academic submission**
 
-Just say the word.
