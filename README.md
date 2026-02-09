@@ -2,238 +2,72 @@
 ![Qt](https://img.shields.io/badge/Qt-6-green)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
-# RISC-V-PIPELINE-VISUALIZER-USING-C++
- under the MIT License. See the LICENSE file for details.
+RISC-V 5-Stage Pipelined Processor Simulator
+Project Overview
+The RISC-V Instruction Set Architecture (ISA) is an open, extensible, and modular ISA based on reduced instruction set computing (RISC) principles. It was designed to provide a clean, simple, and flexible specification that supports a wide range of computing systems, from embedded devices to high-performance processors. RISC-V defines a small base integer instruction set with optional standard and custom extensions, enabling scalability without architectural complexity. Its openness allows academic, industrial, and commercial adoption without licensing restrictions. By separating the ISA from implementation details, RISC-V promotes innovation, portability, and long-term architectural stability across software and hardware ecosystems. The RISC-V pipeline is an execution approach that overlaps multiple instructions to improve processor throughput and overall performance. Instead of completing one instruction before starting the next, pipelining allows different instructions to be processed concurrently at different points in execution, thereby increasing instruction-level parallelism. This technique significantly reduces the average cycles per instruction and enables higher clock utilization without increasing instruction complexity. In RISC-V, pipelining aligns naturally with the simplicity and regularity of the ISA, making it easier to implement efficient and predictable execution flows. Pipelining also supports higher instruction bandwidth, allowing the processor to sustain continuous instruction execution under normal conditions. However, overlapping execution introduces challenges such as data dependencies and control flow changes, which must be managed to maintain correctness.
 
-An interactive desktop tool built with **C++17** and **Qt 6** that simulates a classic 5-stage RISC-V pipeline.  
-It lets you step through instructions cycle by cycle and watch how they move through the pipeline stages, how registers and memory change, and how hazards are detected and resolved.
+Visual Tour
+The Control Center:
+This is where the user writes assembly code and interacts with the ‘Step Pipeline’ button. Control Center
 
-## Overview
+Pipeline Dynamics:
+Notice how each stage (IF, ID, EX, MEM, WB) and hazard resolution(STALL) has a unique color, helping the user track an instruction from start to finish. Pipeline Dynamics
 
-Modern processors complete parts of several instructions at the same time. This simulator shows what happens during each **pipeline stage** per clock cycle:
+The Hardware State:
+A live view of the "Registers" (internal high-speed storage) and "Data Memory" (long-term storage). Hardware State
 
-- **IF** – Instruction Fetch  
-- **ID** – Instruction Decode  
-- **EX** – Execute  
-- **MEM** – Memory Access  
-- **WB** – Write Back  
+The Architecture
+A classic RISC-V processor is commonly organized as a five-stage pipeline to enable efficient instruction execution while maintaining architectural simplicity.
 
-Your RISC-V code runs one cycle at a time, allowing you to see every transition.
+Instruction Fetch (IF):
+This stage is responsible for reading the next instruction from instruction memory using the program counter (PC). The PC is then updated, typically to the next sequential address, while supporting redirection in case of control flow changes.
 
-## Features
+Instruction Decode (ID):
+This stage interprets the fetched instruction. During this stage, the opcode and fields are decoded, the register file is read, and immediate values are generated. Control signals required for later stages are also produced, and basic hazard detection is performed.
 
-- Step-by-step simulation with an interactive GUI  
-- Real-time display of all 5 pipeline stages  
-- Live register and memory views  
-- Automatic load-use hazard detection  
-- Clear messages and visible stalls/bubbles  
-- Cycle and program counters  
-- Simple instruction set  
+Execute (EX):
+In this stage arithmetic and logical operations are carried out by the ALU. This stage also evaluates branch conditions and computes effective addresses for load and store instructions.
 
-## Supported Instructions
+Memory Access (MEM):
+This stage interacts with data memory. Load instructions read data from memory, while store instructions write data to memory. Instructions that do not require memory access simply pass through this stage.
 
-This lightweight simulator currently handles:
+Write-Back (WB):
+This stage updates the destination register with results from the ALU or data memory, completing instruction execution.
 
-- **`lw xd, imm(xs1)`** – Load word from memory into `xd`  
-- **`sw xs2, imm(xs1)`** – Store word from `xs2` into memory  
-- **`add xd, xs1, xs2`** – Add two register values and save result in `xd`  
+Pipeline Hazards
+In an ideal world, one instruction would enter the pipeline every clock cycle. However, because instructions overlap, they often "bump" into each other. These are called Hazards. This simulator handles the two most critical types:
 
-These are enough to demonstrate the core pipeline behaviors and data hazards.
+1. Data Hazards (Read-After-Write)
+A data hazard occurs when an instruction needs the result of a previous instruction that hasn't finished yet. The Example: ADD x1, x2, x3 (Calculates x1, but doesn't save it until Stage 5), SUB x4, x1, x5 (Needs x1 immediately in Stage 3). The Resolution (Forwarding): Instead of waiting for Stage 5, this simulator implements Forwarding. It "snatches" the result from the end of the EX or MEM stage and wires it directly back to the ALU input, allowing the CPU to keep running at full speed.
 
-## Getting Started on Windows
+2. Load-Use Hazards
+This is a "hard" hazard. When you load data from memory (LW), the data isn't available until the very end of the MEM stage. If the next instruction needs that data immediately, even forwarding can't save us. The Example: LW x1, 0(x2) (Data only ready at the end of Stage 4). ADD x3, x1, x4 (Needs data at the start of Stage 3). The Resolution (Stalling): The simulator detects this conflict and performs a Stall. It pauses the first two stages and injects a "Bubble" (a NOP or No-Operation) into the pipeline. This acts as a "wait" command, pushing the second instruction back by one cycle until the data is ready. Forwarding
 
-### Prerequisites
+Instruction Set Support
+The simulator supports the core RISC-V instructions required for basic computation and memory manipulation:
 
-Make sure you have the following installed:
+R-Type (Register):
+ADD, SUB, AND, OR. These perform math using only the 32 internal registers.
 
-- **CMake 3.16+**  
-- **Qt 6.x** (Qt Base, Widgets, and GUI modules)  
-- **Visual Studio 2019 or newer** with C++ build tools  
-- **Git** (optional, for cloning the repository)
+I-Type (Immediate/Load):
+ADDI (Add a constant) and LW (Load from memory).
 
-You can verify Qt with:
-```
-qmake --version
-```
+S-Type (Store):
+SW (Store to memory).
 
-### Build Instructions (Visual Studio)
+Future Plans
+1. Expanded Instruction Set Architecture (ISA)
+While the current version supports the base RV32I instructions, expanding the supported modules will allow the simulator to run more complex software: M-Extension (Multiplication/Division): Implementing hardware-level integer multiplication and division logic. C-Extension (Compressed Instructions): Adding support for 16-bit instructions to demonstrate how code density affects fetch bandwidth and cache performance. Floating-Point Support (F/D Extensions): Integrating a separate Floating-Point Unit (FPU) and a set of 32 floating-point registers.
 
-1. Open **Developer Command Prompt for VS** or use **Qt 6 Command Prompt**.  
-2. Clone and build the repository:
+2. Advanced Microarchitecture Features
+To move closer to modern performance standards, several hardware-level optimizations are on the roadmap: Branch Prediction: Moving beyond simple stalls to implement Dynamic Branch Prediction (using a Branch Target Buffer) to minimize the "control hazard" penalty. Cache Hierarchy: Introducing a Level 1 (L1) Instruction and Data Cache. This will allow users to visualize Cache Misses and the resulting pipeline stalls. Out-of-Order Execution: Implementing a "Scoreboard" or "Tomasulo’s Algorithm" to allow instructions to bypass each other when they don't have data dependencies.
 
-```batch
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-mkdir build
-cd build
-cmake .. -G "Visual Studio 17 2022" -A x64
-cmake --build . --config Release
-```
+3. Enhanced Visualization & Debugging
+The user interface will be updated to provide deeper insights into the "soul" of the machine: Waveform Viewer: Integrating a logic-analyzer style view (similar to GTKWave) to show signal transitions over time. Pipeline Gantt Chart: A visual timeline showing exactly where every instruction is across multiple clock cycles. Performance Metrics Dashboard: Real-time calculation of CPI (Cycles Per Instruction), IPC (Instructions Per Cycle), and branch accuracy percentages.
 
-After building, **RISCVPipeline.exe** will appear in:
-```
-build\Release\
-```
+4. Software Ecosystem Integration
+ELF Loader: Currently, the simulator uses manual assembly entry. A planned update will allow the loading of compiled .elf files directly from standard RISC-V GCC toolchains. Virtual Peripherals: Adding a memory-mapped UART (for text output) or a simple VGA buffer to allow the simulated CPU to "talk" to the outside world. Why C++ and Qt? C++17: This was chosen for the "Hardware Logic." C++ allows for low-level bit manipulation and precise control over data structures, which is essential when trying to mimic the physical gates and wires of a processor. Qt 6: This powers the "Visuals." Qt is a professional-grade framework that allows us to turn complex C++ variables into a modern, responsive GUI. It uses a "Signal and Slot" system to ensure that when a register changes in the C++ backend, the UI updates instantly.
 
-### Run the Simulator
-
-From the command prompt:
-```batch
-cd build\Release
-RISCVPipeline.exe
-``## Hazard Demonstrations
-
-
-
-
-
-The application window includes:
-- A text editor for entering RISC-V assembly  
-- A **STEP** button to advance the pipeline  
-- Tables showing stage activity, register values, and memory contents  
-
-## Example Program
-
-Enter code like this in the editor:
-
-```asm
-lw x1, 0(x0)
-lw x2, 4(x0)
-add x3, x1, x2
-sw x3, 8(x0)
-```
-
-Press **STEP** repeatedly to observe the simulation.
-
-You will see:
-- Instructions moving through each pipeline stage  
-- Register `x3` receiving the computed result  
-- Memory updates at address `8(x0)`  
-- Cycle and program counters changing  
-
-When all stages show `nop`, the program has completed.
-<img width="940" height="496" alt="image" src="https://github.com/user-attachments/assets/8e507a5c-4b23-45eb-8705-bc3ad50f13ba" />
-
-
-
-### Data Hazard (RAW)
-
-<img width="1920" height="960" alt="image" src="https://github.com/user-attachments/assets/43039284-768e-4bfa-83d9-daac7ebe0715" />
-
-
-### Load-Use Hazard
-<img width="862" height="628" alt="image" src="https://github.com/user-attachments/assets/9bd4bbb9-b3a7-4d53-bb7e-e0e417580ca7" />
-
-
-
-### Control Hazard
-
-<img width="884" height="603" alt="image" src="https://github.com/user-attachments/assets/75c53d7b-bbed-4907-9a44-b67b1d34924c" />
-
-## Understanding Pipeline Hazards
-
-Processors often face timing conflicts, called **hazards**. The simulator highlights them visually, inserting *stalls* or *flushes* as required.
-
-### 1. Data Hazard (Read-After-Write)
-
-Occurs when an instruction attempts to read a register whose value has not yet been written back.
-
-```asm
-lw x1, 0(x0)
-add x2, x1, x1
-```
-
-Here, `add` depends on `lw`.  
-The simulator pauses `add` for a cycle — showing a **bubble** — until `x1` is ready.
-
-Simplified view:
-
-| Cycle | IF | ID | EX | MEM | WB |
-|:------|:--:|:--:|:--:|:---:|:--:|
-| 1     | lw | -  | -  | -   | -  |
-| 2     | add| lw | -  | -   | -  |
-| 3     | stall | add | lw | - | - |
-| 4     | -  | stall | add | lw | - |
-
-### 2. Structural Hazard
-
-When two stages need the same hardware (like memory) in the same cycle.
-
-Example:
-```asm
-lw x1, 0(x2)
-sw x3, 4(x2)
-```
-If your model has a single memory port, one instruction must wait.  
-The simulator visually freezes one stage with a "Memory Busy" note.
-
-### 3. Control Hazard (Branches & Jumps)
-
-Occurs when the CPU cannot determine the next instruction until a branch condition is known.
-
-```asm
-beq x1, x2, LABEL
-add x3, x4, x5
-LABEL: sub x6, x6, x7
-```
-
-Until `beq` finishes the **Execute** stage, the next instruction path is unknown.  
-If the branch is taken, the visualizer *flushes* (clears) the incorrect instruction.
-
-| Cycle | IF | ID | EX | MEM | WB |
-|:------|:--:|:--:|:--:|:---:|:--:|
-| 1     | beq| -  | -  | -   | -  |
-| 2     | add| beq| -  | -   | -  |
-| 3     | sub| add| beq| -   | -  |
-| 4     | flush | sub | add | beq | - |
-| 5     | LABEL | - | - | - | - |
-
-## Internal Design
-
-The simulator models:
-- 32 general-purpose registers (x0 = 0)
-- A simplified memory array
-- Pipeline state registers (IF → ID → EX → MEM → WB)
-- Hazard detection logic and stage control
-
-Each clock cycle:
-1. The **WB stage** updates registers.  
-2. **MEM stage** performs loads/stores.  
-3. The hazard unit checks for dependencies.  
-4. Instructions advance to the next stage.  
-5. A new instruction is fetched if space is available.  
-
-## Folder Structure
-
-```
-.
-├── CMakeLists.txt
-├── main.cpp
-├── mainwindow.h/.cpp
-├── pipeline.h/.cpp
-└── README.md
-```
-
-`mainwindow.cpp` → User interface  
-`pipeline.cpp` → Simulation logic
-
-## Future Plans
-
-- More RISC-V instructions (sub, and, or, branches, jumps)  
-- Forwarding and bypassing logic  
-- "Run Continuously" mode  
-- Editable initial memory and register states  
-- Export trace logs  
-- Unit tests  
-
-## Contributing
-
-1. Fork this repository  
-2. Create a feature branch  
-3. Test your changes  
-4. Open a pull request  
-
-## License
-
-This project is licensed under the **MIT License**.  
-See the `LICENSE` file for details.
+Installation & Usage
+1. Requirements
+Qt Creator: The Integrated Development Environment (IDE) used to build the project. C++ Compiler: (GCC, Clang, or MSVC) to turn the code into an executable.
