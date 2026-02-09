@@ -106,7 +106,7 @@ The `SUB` instruction requires `x1` before the `ADD` instruction reaches the wri
 The simulator implements **data forwarding**, routing results directly from the EX or MEM stage back to the ALU input, eliminating unnecessary stalls.
 
 ---
-<img width="1920" height="1080" alt="stalling" src="https://github.com/user-attachments/assets/3f0fb29e-0965-4f03-8ee6-98d63c82467e" />
+
 
 
 ### **2. Load-Use Hazards**
@@ -120,6 +120,7 @@ ADD x3, x1, x4
 
 The loaded value is only available at the end of the MEM stage, making forwarding insufficient.
 
+<img width="1920" height="1080" alt="stalling" src="https://github.com/user-attachments/assets/3f0fb29e-0965-4f03-8ee6-98d63c82467e" />
 **Resolution — Stalling**
 The simulator detects the conflict and:
 
