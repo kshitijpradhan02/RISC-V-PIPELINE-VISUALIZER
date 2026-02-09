@@ -29,11 +29,14 @@ While pipelining improves efficiency, it introduces **data and control hazards**
 
 ## **Visual Tour**
 
-### **Control Center**
 
+
+### **Control Center**
+<img width="1920" height="1080" alt="control_centre" src="https://github.com/user-attachments/assets/ea667941-c998-48e7-83cb-bea8d76467ec" />
 The interface where users write RISC-V assembly code and advance execution using the **Step Pipeline** button.
 
 ### **Pipeline Dynamics**
+
 
 Each pipeline stage—**IF, ID, EX, MEM, WB**—is displayed with a unique color. Hazards such as **STALLs** are clearly highlighted, allowing users to follow instructions as they flow through the pipeline.
 
