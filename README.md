@@ -32,10 +32,12 @@ While pipelining improves efficiency, it introduces **data and control hazards**
 
 
 ### **Control Center**
-<img width="1920" height="1080" alt="control_centre" src="https://github.com/user-attachments/assets/ea667941-c998-48e7-83cb-bea8d76467ec" />
+<img width="1920" height="1080" alt="control_centre" src="https://github.com/user-attachments/assets/ea667941-c998-48e7-83cb-bea8d76467ec"<img width="1920" height="1080" alt="pipeline_dynamics" src="https://github.com/user-attachments/assets/1550ce2b-1728-4bb1-8c78-192f069ead8a" />
+ />
 The interface where users write RISC-V assembly code and advance execution using the **Step Pipeline** button.
 
 ### **Pipeline Dynamics**
+![Uploading pipeline_dynamics.png…]()
 
 
 Each pipeline stage—**IF, ID, EX, MEM, WB**—is displayed with a unique color. Hazards such as **STALLs** are clearly highlighted, allowing users to follow instructions as they flow through the pipeline.
@@ -46,6 +48,8 @@ A real-time view of:
 
 * **Register File** (32 general-purpose registers)
 * **Data Memory**
+
+<img width="1920" height="1080" alt="hardware_state" src="https://github.com/user-attachments/assets/ffcdde71-606d-44cb-b39d-51e051b46f37" />
 
 ---
 
@@ -102,6 +106,8 @@ The `SUB` instruction requires `x1` before the `ADD` instruction reaches the wri
 The simulator implements **data forwarding**, routing results directly from the EX or MEM stage back to the ALU input, eliminating unnecessary stalls.
 
 ---
+<img width="1920" height="1080" alt="stalling" src="https://github.com/user-attachments/assets/3f0fb29e-0965-4f03-8ee6-98d63c82467e" />
+
 
 ### **2. Load-Use Hazards**
 
