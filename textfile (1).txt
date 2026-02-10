@@ -1,0 +1,7 @@
+lw x10, 0x100(x0)
+lw x11, 0x104(x0)
+add x12, x10, x11
+sw x12, 0x108(x0)
+add x13, x12, x12
+nop
+nop
