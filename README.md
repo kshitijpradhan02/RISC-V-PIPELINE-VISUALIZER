@@ -200,10 +200,4 @@ Provides a modern GUI framework. Qt’s **signal-slot mechanism** ensures real-t
 
 ---
 
-If you want, I can also:
-
-* Convert this into a **`README.md` file**
-* Add **screenshots placeholders**
-* Write a **project abstract** for reports
-* Tighten it for **academic submission**
 
